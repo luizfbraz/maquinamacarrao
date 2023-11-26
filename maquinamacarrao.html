@@ -85,36 +85,33 @@
     </form>
 
     <script>
-    function enviarResposta(respostas) {
-        console.log('Dados a serem enviados:', respostas); // Adiciona um log para verificar os dados
-    
-        fetch('https://api.github.com/repos/luizfbraz/maquinamacarrao/issues', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer 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',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                title: 'Resposta à Máquina de Macarrão',
-                body: JSON.stringify(respostas)
+        function enviarResposta(respostas) {
+            fetch('https://api.github.com/repos/luizfbraz/maquinamacarrao/issues', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer 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',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    title: 'Resposta à Máquina de Macarrão',
+                    body: JSON.stringify(respostas) // Corrigido para enviar o objeto respostas como JSON
+                })
             })
-        })
-        .then(response => {
-            console.log('Resposta do servidor:', response); // Adiciona um log para verificar a resposta do servidor
-            if (!response.ok) {
-                throw new Error('Erro ao enviar resposta. Resposta do servidor: ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Resposta enviada com sucesso:', data);
-            alert('Resposta enviada com sucesso!');
-        })
-        .catch(error => {
-            console.error('Erro:', error);
-            alert('Erro ao enviar resposta. Verifique o console para mais detalhes.');
-        });
-    }
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao enviar resposta.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Resposta enviada com sucesso:', data);
+                alert('Resposta enviada com sucesso!');
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao enviar resposta. Verifique o console para mais detalhes.');
+            });
+        }
 
         function updatePoints() {
             var form = document.getElementById("questionnaireForm");
