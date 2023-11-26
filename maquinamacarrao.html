@@ -1,7 +1,5 @@
 <script>
     function enviarResposta(respostas) {
-        console.log('Dados a serem enviados:', respostas); // Adiciona um log para verificar os dados
-    
         fetch('https://api.github.com/repos/luizfbraz/maquinamacarrao/issues', {
             method: 'POST',
             headers: {
@@ -10,13 +8,12 @@
             },
             body: JSON.stringify({
                 title: 'Resposta à Máquina de Macarrão',
-                body: JSON.stringify(respostas)
+                body: JSON.stringify(respostas) // Corrigido para enviar o objeto respostas como JSON
             })
         })
         .then(response => {
-            console.log('Resposta do servidor:', response); // Adiciona um log para verificar a resposta do servidor
             if (!response.ok) {
-                throw new Error('Erro ao enviar resposta. Resposta do servidor: ' + response.statusText);
+                throw new Error('Erro ao enviar resposta.');
             }
             return response.json();
         })
