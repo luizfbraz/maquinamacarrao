@@ -17,7 +17,7 @@
         <input type="number" id="age" name="age" required>
 
         <ol>
-            <li>
+            <li id="q1">
                 <label>Fácil de usar, necessita de pouca ou nenhuma habilidade do operador:</label>
                 <select name="q1" onchange="updatePoints()">
                     <option value="0" selected>Não avaliado (0 pontos)</option>
@@ -27,7 +27,7 @@
                 </select>
             </li>
 
-            <li>
+            <li id="q2">
                 <label>Durável, peças resistentes e que não quebrem facilmente:</label>
                 <select name="q2" onchange="updatePoints()">
                     <option value="0" selected>Não avaliado (0 pontos)</option>
@@ -37,7 +37,7 @@
                 </select>
             </li>
 
-            <li>
+            <li id="q3">
                 <label>Eficiente, pouco consumo de energia elétrica e não desperdiça a massa:</label>
                 <select name="q3" onchange="updatePoints()">
                     <option value="0" selected>Não avaliado (0 pontos)</option>
@@ -47,7 +47,7 @@
                 </select>
             </li>
 
-            <li>
+            <li id="q4">
                 <label>Prática, não ocupa muito espaço na cozinha e não faz bagunça:</label>
                 <select name="q4" onchange="updatePoints()">
                     <option value="0" selected>Não avaliado (0 pontos)</option>
@@ -57,7 +57,7 @@
                 </select>
             </li>
 
-            <li>
+            <li id="q5">
                 <label>Fácil de limpar, peças sujas com fácil acesso e sem cantos:</label>
                 <select name="q5" onchange="updatePoints()">
                     <option value="0" selected>Não avaliado (0 pontos)</option>
@@ -67,7 +67,7 @@
                 </select>
             </li>
 
-            <li>
+            <li id="q6">
                 <label>Versátil, permite fazer diferentes massas com diferentes espessuras:</label>
                 <select name="q6" onchange="updatePoints()">
                     <option value="0" selected>Não avaliado (0 pontos)</option>
@@ -85,9 +85,7 @@
     </form>
 
     <script>
-        function enviarResposta() {
-            var resposta = document.getElementById('resposta').value;
-            
+        function enviarResposta(respostas) {
             fetch('https://api.github.com/repos/luizfbraz/maquinamacarrao/issues', {
                 method: 'POST',
                 headers: {
@@ -96,7 +94,7 @@
                 },
                 body: JSON.stringify({
                     title: 'Resposta à Máquina de Macarrão',
-                    body: resposta
+                    body: JSON.stringify(respostas) // Corrigido para enviar o objeto respostas como JSON
                 })
             })
             .then(response => {
@@ -135,11 +133,13 @@
             var totalPoints = 0;
             var hasUnratedOption = false;
 
+            var respostas = {};
+
             for (var i = 0; i < elements.length; i++) {
                 if (elements[i].type == "select-one") {
                     totalPoints += parseInt(elements[i].value);
+                    respostas[elements[i].name] = elements[i].value;
 
-                    // Verifica se há alguma opção como "Não avaliado"
                     if (elements[i].value === "0") {
                         hasUnratedOption = true;
                     }
@@ -150,6 +150,7 @@
                 alert("Por favor, avalie todas as opções antes de enviar o formulário.");
             } else if (totalPoints <= 16) {
                 alert("Formulário enviado com sucesso!");
+                enviarResposta(respostas);
             } else {
                 alert("Você ultrapassou o limite de 16 pontos. Por favor, ajuste suas respostas.");
             }
